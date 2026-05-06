@@ -1,0 +1,92 @@
+version: "3.9"
+
+services:
+  # ── LocalStack (DynamoDB + S3 + SNS + SES + Cognito emulation) ──────────────
+  localstack:
+    image: localstack/localstack:3.6
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=dynamodb,s3,sns,ses,rekognition
+      - DEFAULT_REGION=us-east-1
+      - DEBUG=0
+    volumes:
+      - localstack_data:/var/lib/localstack
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Users Service ────────────────────────────────────────────────────────────
+  users:
+    build:
+      context: .
+      dockerfile: services/users/Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - DYNAMODB_ENDPOINT_URL=http://localstack:4566
+      - COGNITO_REGION=us-east-1
+      - COGNITO_USER_POOL_ID=${COGNITO_USER_POOL_ID}
+      - COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
+      - COGNITO_CLIENT_SECRET=${COGNITO_CLIENT_SECRET}
+      - LOG_LEVEL=INFO
+    depends_on:
+      localstack:
+        condition: service_healthy
+    command: >
+      uvicorn services.users.main:app
+      --host 0.0.0.0 --port 8000 --reload
+
+  # ── Incidents Service ────────────────────────────────────────────────────────
+  incidents:
+    build:
+      context: .
+      dockerfile: services/incidents/Dockerfile
+    ports:
+      - "8002:8000"
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - DYNAMODB_ENDPOINT_URL=http://localstack:4566
+      - REPORTS_TABLE=fire_reports
+      - COGNITO_REGION=us-east-1
+      - COGNITO_USER_POOL_ID=${COGNITO_USER_POOL_ID}
+      - COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
+      - LOG_LEVEL=INFO
+    depends_on:
+      localstack:
+        condition: service_healthy
+    command: >
+      uvicorn services.incidents.main:app
+      --host 0.0.0.0 --port 8000 --reload
+
+  # ── Fire Validation Service (EC2/Docker) ─────────────────────────────────────
+  fire_validation:
+    build:
+      context: .
+      dockerfile: services/fire_validation/Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DYNAMODB_ENDPOINT_URL=http://localstack:4566
+      - REPORTS_TABLE=fire_reports
+      - VALIDATIONS_TABLE=fire_validations
+      - COGNITO_REGION=us-east-1
+      - COGNITO_USER_POOL_ID=${COGNITO_USER_POOL_ID}
+      - COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
+      - LOG_LEVEL=INFO
+    depends_on:
+      localstack:
+        condition: service_healthy
+
+volumes:
+  localstack_data:
