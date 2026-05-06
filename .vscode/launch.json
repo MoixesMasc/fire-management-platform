@@ -1,0 +1,81 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Users Service",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["services.users.main:app", "--host", "0.0.0.0", "--port", "8001", "--reload"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "AWS_REGION": "us-east-1",
+        "AWS_ACCESS_KEY_ID": "test",
+        "AWS_SECRET_ACCESS_KEY": "test",
+        "DYNAMODB_ENDPOINT_URL": "http://localhost:4566",
+        "COGNITO_REGION": "us-east-1",
+        "COGNITO_USER_POOL_ID": "us-east-1_TEST",
+        "COGNITO_CLIENT_ID": "test-client-id",
+        "LOG_LEVEL": "INFO"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Incidents Service",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["services.incidents.main:app", "--host", "0.0.0.0", "--port", "8002", "--reload"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "AWS_REGION": "us-east-1",
+        "AWS_ACCESS_KEY_ID": "test",
+        "AWS_SECRET_ACCESS_KEY": "test",
+        "DYNAMODB_ENDPOINT_URL": "http://localhost:4566",
+        "REPORTS_TABLE": "fire_reports",
+        "COGNITO_REGION": "us-east-1",
+        "COGNITO_USER_POOL_ID": "us-east-1_TEST",
+        "COGNITO_CLIENT_ID": "test-client-id",
+        "LOG_LEVEL": "INFO"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Fire Validation Service",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["services.fire_validation.main:app", "--host", "0.0.0.0", "--port", "8003", "--reload"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "AWS_REGION": "us-east-1",
+        "AWS_ACCESS_KEY_ID": "test",
+        "AWS_SECRET_ACCESS_KEY": "test",
+        "DYNAMODB_ENDPOINT_URL": "http://localhost:4566",
+        "REPORTS_TABLE": "fire_reports",
+        "VALIDATIONS_TABLE": "fire_validations",
+        "COGNITO_REGION": "us-east-1",
+        "COGNITO_USER_POOL_ID": "us-east-1_TEST",
+        "COGNITO_CLIENT_ID": "test-client-id",
+        "LOG_LEVEL": "INFO"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Pytest — All Tests",
+      "type": "python",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["services/", "-v", "--tb=short"],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}",
+        "AWS_REGION": "us-east-1",
+        "AWS_ACCESS_KEY_ID": "test",
+        "AWS_SECRET_ACCESS_KEY": "test",
+        "DYNAMODB_ENDPOINT_URL": "http://localhost:4566",
+        "LOG_LEVEL": "ERROR"
+      },
+      "console": "integratedTerminal"
+    }
+  ]
+}

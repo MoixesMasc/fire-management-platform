@@ -1,0 +1,47 @@
+{
+  // ── Python interpreter: usa el venv del proyecto ──────────────────────────
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.terminal.activateEnvironment": true,
+
+  // ── Tests con Pytest ───────────────────────────────────────────────────────
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": [
+    "services",
+    "--tb=short",
+    "-q"
+  ],
+
+  // ── Linting y formato ──────────────────────────────────────────────────────
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "ms-python.python",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+
+  // ── Excluir carpetas pesadas del explorador ────────────────────────────────
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    ".venv": true,
+    ".coverage": true,
+    ".pytest_cache": true
+  },
+
+  // ── Autocompletado de rutas en imports Python ──────────────────────────────
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ],
+  "python.analysis.typeCheckingMode": "basic",
+
+  // ── Terminal: activa el venv automáticamente ───────────────────────────────
+  "terminal.integrated.env.windows": {
+    "PYTHONPATH": "${workspaceFolder}",
+    "AWS_REGION": "us-east-1",
+    "AWS_ACCESS_KEY_ID": "test",
+    "AWS_SECRET_ACCESS_KEY": "test",
+    "DYNAMODB_ENDPOINT_URL": "http://localhost:4566",
+    "LOG_LEVEL": "INFO"
+  }
+}
