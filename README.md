@@ -1,5 +1,17 @@
 # Fire Management Platform
 
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-v2-E92063?style=flat&logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
+[![pytest](https://img.shields.io/badge/tests-52%20passed-4CAF50?style=flat&logo=pytest&logoColor=white)](https://pytest.org/)
+[![Coverage](https://img.shields.io/badge/coverage-87%25-4CAF50?style=flat&logo=codecov&logoColor=white)](https://github.com/MoixesMasc/fire-management-platform)
+[![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-FF9900?style=flat&logo=awslambda&logoColor=white)](https://aws.amazon.com/lambda/)
+[![DynamoDB](https://img.shields.io/badge/AWS-DynamoDB-4053D6?style=flat&logo=amazondynamodb&logoColor=white)](https://aws.amazon.com/dynamodb/)
+[![Docker](https://img.shields.io/badge/Docker-Alpine-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000?style=flat&logo=python&logoColor=white)](https://github.com/psf/black)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat)](LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/MoixesMasc/fire-management-platform?style=flat&logo=github)](https://github.com/MoixesMasc/fire-management-platform/commits/master)
+
 Plataforma de gestión de incendios basada en microservicios independientes sobre AWS, construida con FastAPI, DynamoDB y servicios gestionados de AWS.
 
 ---
