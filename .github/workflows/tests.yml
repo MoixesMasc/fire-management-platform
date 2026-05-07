@@ -1,0 +1,75 @@
+name: Tests
+
+on:
+  push:
+    branches: [master, main, develop]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    name: Pytest — Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: services/users/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            fastapi==0.115.5 \
+            mangum==0.19.0 \
+            "pydantic[email]==2.10.3" \
+            boto3==1.35.85 \
+            "python-jose[cryptography]==3.3.0" \
+            httpx==0.28.1 \
+            structlog==24.4.0 \
+            "uvicorn[standard]==0.32.1" \
+            pytest==8.3.4 \
+            pytest-asyncio==0.24.0 \
+            pytest-cov==6.0.0
+
+      - name: Run tests with coverage
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          DYNAMODB_ENDPOINT_URL: http://localhost:8000
+          COGNITO_REGION: us-east-1
+          COGNITO_USER_POOL_ID: us-east-1_TEST
+          COGNITO_CLIENT_ID: test-client-id
+          REPORTS_TABLE: fire_reports
+          VALIDATIONS_TABLE: fire_validations
+          USERS_TABLE: fire_users
+          LOG_LEVEL: ERROR
+        run: |
+          pytest services/ \
+            --cov=services \
+            --cov=shared \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            --cov-fail-under=80 \
+            -v
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: matrix.python-version == '3.11'
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 7
