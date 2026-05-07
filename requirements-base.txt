@@ -1,0 +1,9 @@
+# Dependencias base compartidas entre todos los microservicios
+boto3==1.35.85
+structlog==24.4.0
+pydantic[email]==2.10.3
+
+# Testing (solo desarrollo)
+pytest==8.3.4
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0

@@ -1,6 +1,5 @@
 """DynamoDB persistence for fire validation results."""
 import os
-from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
 
@@ -8,6 +7,7 @@ from botocore.exceptions import ClientError
 
 from shared.dynamodb import get_table, handle_client_error
 from shared.logging_config import get_logger
+from shared.utils import now_iso
 from services.fire_validation.models import (
     RekognitionLabel,
     ValidateResponse,
@@ -20,8 +20,19 @@ VALIDATIONS_TABLE = os.getenv("VALIDATIONS_TABLE", "fire_validations")
 REPORTS_TABLE = os.getenv("REPORTS_TABLE", "fire_reports")
 
 
-def _now_iso() -> str:
-    return datetime.now(tz=timezone.utc).isoformat()
+MESSAGE_MAP = {
+    "fire_confirmed":    "Fire confirmed. Report validated and authorities notified.",
+    "fire_not_detected": "No fire detected. Report marked as rejected.",
+    "inconclusive":      "Analysis inconclusive. Manual review required.",
+    "error":             "Validation error. Report remains pending.",
+}
+
+REPORT_STATUS_MAP = {
+    "fire_confirmed":    "validated",
+    "fire_not_detected": "rejected",
+    "inconclusive":      "pending",
+    "error":             "pending",
+}
 
 
 async def save_validation_result(
@@ -35,17 +46,9 @@ async def save_validation_result(
 ) -> ValidateResponse:
     """Persist validation result and update the parent report status."""
     validation_id = str(uuid4())
-    now = _now_iso()
+    now = now_iso()
     s3_uri = f"s3://{s3_bucket}/{s3_key}"
-
-    # Map validation status to report status
-    report_status_map = {
-        ValidationStatus.FIRE_CONFIRMED: "validated",
-        ValidationStatus.FIRE_NOT_DETECTED: "rejected",
-        ValidationStatus.INCONCLUSIVE: "pending",
-        ValidationStatus.ERROR: "pending",
-    }
-    new_report_status = report_status_map[validation_status]
+    new_report_status = REPORT_STATUS_MAP[validation_status.value]
 
     validations_table = get_table(VALIDATIONS_TABLE)
     item: dict[str, Any] = {
@@ -84,13 +87,6 @@ async def save_validation_result(
         status=validation_status.value,
     )
 
-    message_map = {
-        ValidationStatus.FIRE_CONFIRMED: "Fire confirmed. Report validated and authorities notified.",
-        ValidationStatus.FIRE_NOT_DETECTED: "No fire detected. Report marked as rejected.",
-        ValidationStatus.INCONCLUSIVE: "Analysis inconclusive. Manual review required.",
-        ValidationStatus.ERROR: "Validation error. Report remains pending.",
-    }
-
     return ValidateResponse(
         validation_id=validation_id,
         report_id=report_id,
@@ -100,5 +96,5 @@ async def save_validation_result(
         fire_labels=fire_labels,
         s3_image_uri=s3_uri,
         validated_at=now,
-        message=message_map[validation_status],
+        message=MESSAGE_MAP[validation_status.value],
     )

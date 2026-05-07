@@ -1,10 +1,10 @@
 """Pydantic v2 models for the Incidents microservice."""
-from datetime import datetime
 from enum import Enum
 from typing import Optional
-from uuid import UUID
 
 from pydantic import BaseModel, Field
+
+from shared.models import GeoPoint
 
 
 class SeverityLevel(str, Enum):
@@ -21,9 +21,8 @@ class IncidentStatus(str, Enum):
     RESOLVED = "resolved"
 
 
-class GeoLocation(BaseModel):
-    latitude: float = Field(..., ge=-90.0, le=90.0)
-    longitude: float = Field(..., ge=-180.0, le=180.0)
+class GeoLocation(GeoPoint):
+    """Extiende GeoPoint con altitud opcional."""
     altitude_meters: Optional[float] = Field(default=None, ge=0.0)
 
 

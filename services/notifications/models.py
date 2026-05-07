@@ -4,16 +4,13 @@ from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
+from shared.models import GeoPoint  # noqa: F401 — re-exportado para uso interno
+
 
 class NotificationChannel(str, Enum):
     SNS = "sns"
     SES = "ses"
     BOTH = "both"
-
-
-class GeoPoint(BaseModel):
-    latitude: float
-    longitude: float
 
 
 class FireAlert(BaseModel):

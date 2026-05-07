@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(code:*)",
+      "Bash(taskkill //F //IM Code.exe)",
+      "Bash(code --install-extension ms-python.python --force)",
+      "Bash(code .)",
+      "Bash(\"/c/Users/Moisexo/Downloads/fullstack3/.venv/Scripts/python.exe\" -m pytest services/ -v --tb=short)",
+      "Bash(.venv/Scripts/python.exe -c ':*)",
+      "Bash(.venv/Scripts/python.exe -m uvicorn services.incidents.main:app --host 0.0.0.0 --port 8002 --reload)",
+      "Bash(echo \"PID=$!\")",
+      "Bash(curl:*)",
+      "Bash(python3 -m json.tool)",
+      "Bash(.venv/Scripts/python.exe -m uvicorn services.users.main:app --host 0.0.0.0 --port 8001 --reload)",
+      "Bash(.venv/Scripts/python.exe -m uvicorn services.fire_validation.main:app --host 0.0.0.0 --port 8003 --reload)",
+      "Bash(.venv/Scripts/python.exe test_remaining_services.py)",
+      "Bash(export PATH=\"$PATH:/c/Program Files/GitHub CLI\")",
+      "Bash(gh run:*)",
+      "Bash(.venv/Scripts/python.exe -m pytest services/ -v --tb=short)"
+    ]
+  }
+}

@@ -48,6 +48,4 @@ class ValidateResponse(BaseModel):
     message: str
 
 
-class ErrorResponse(BaseModel):
-    detail: str
-    error_code: Optional[str] = None
+from shared.models import ErrorResponse  # noqa: F401 — re-exportado para compatibilidad

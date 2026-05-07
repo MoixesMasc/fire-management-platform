@@ -54,6 +54,4 @@ class SignUpResponse(BaseModel):
     message: str = "User registered successfully. Check your email to confirm your account."
 
 
-class ErrorResponse(BaseModel):
-    detail: str
-    error_code: Optional[str] = None
+from shared.models import ErrorResponse  # noqa: F401 — re-exportado para compatibilidad

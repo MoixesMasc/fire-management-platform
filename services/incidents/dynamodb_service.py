@@ -1,7 +1,6 @@
 """DynamoDB operations for the Incidents microservice."""
 import json
 import os
-from datetime import datetime, timezone
 from typing import Any, Optional
 from uuid import uuid4
 
@@ -9,6 +8,7 @@ from botocore.exceptions import ClientError
 
 from shared.dynamodb import Attr, Key, get_table, handle_client_error
 from shared.logging_config import get_logger
+from shared.utils import now_iso
 from services.incidents.models import (
     CreateReportRequest,
     GeoLocation,
@@ -19,10 +19,6 @@ from services.incidents.models import (
 logger = get_logger(__name__)
 
 REPORTS_TABLE = os.getenv("REPORTS_TABLE", "fire_reports")
-
-
-def _now_iso() -> str:
-    return datetime.now(tz=timezone.utc).isoformat()
 
 
 def _item_to_response(item: dict[str, Any]) -> ReportResponse:
@@ -47,7 +43,7 @@ async def create_report(
     """Persist a new fire incident report."""
     table = get_table(REPORTS_TABLE)
     report_id = str(uuid4())
-    now = _now_iso()
+    now = now_iso()
 
     item: dict[str, Any] = {
         "report_id": report_id,
