@@ -1,0 +1,96 @@
+{
+  "users": [
+    {
+      "user_id": "user-1",
+      "email": "ana@example.com",
+      "phone_number": "+15550000001",
+      "latitude": "40.7128",
+      "longitude": "-74.0060",
+      "name": "Ana Rivera"
+    },
+    {
+      "user_id": "user-2",
+      "email": "raul@example.com",
+      "phone_number": "+15550000002",
+      "latitude": "40.7145",
+      "longitude": "-74.0052",
+      "name": "Raúl López"
+    },
+    {
+      "user_id": "user-3",
+      "email": "carla@example.com",
+      "phone_number": "+15550000003",
+      "latitude": "34.0522",
+      "longitude": "-118.2437",
+      "name": "Carla Gómez"
+    }
+  ],
+  "reports": [
+    {
+      "report_id": "report-1",
+      "title": "Humo visible en almacén del puerto",
+      "description": "Se observan columnas de humo cerca del almacén de cargas.",
+      "location": {
+        "latitude": 40.713,
+        "longitude": -74.007
+      },
+      "severity": "high",
+      "status": "pending",
+      "reporter_id": "user-1",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "image_s3_key": "images/report-1.jpg"
+    },
+    {
+      "report_id": "report-2",
+      "title": "Incendio forestal en colinas cercanas",
+      "description": "Se detectó un incendio de maleza en la zona norte.",
+      "location": {
+        "latitude": 34.0522,
+        "longitude": -118.2437
+      },
+      "severity": "critical",
+      "status": "validated",
+      "reporter_id": "user-3",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z",
+      "image_s3_key": "images/report-2.jpg"
+    },
+    {
+      "report_id": "report-3",
+      "title": "Residuos ardientes en estacionamiento",
+      "description": "Se quemaron residuos sólidos en un estacionamiento comercial.",
+      "location": {
+        "latitude": 40.7135,
+        "longitude": -74.005
+      },
+      "severity": "medium",
+      "status": "rejected",
+      "reporter_id": "user-2",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "validations": [
+    {
+      "validation_id": "validation-1",
+      "report_id": "report-2",
+      "status": "fire_confirmed",
+      "s3_image_uri": "s3://fire-validation/test-report-2.jpg",
+      "fire_labels": ["Fire", "Smoke"],
+      "labels_count": 3,
+      "validated_at": "2026-01-01T00:00:00Z",
+      "confidence_score": "95.2"
+    },
+    {
+      "validation_id": "validation-2",
+      "report_id": "report-3",
+      "status": "fire_not_detected",
+      "s3_image_uri": "s3://fire-validation/test-report-3.jpg",
+      "fire_labels": [],
+      "labels_count": 1,
+      "validated_at": "2026-01-01T00:00:00Z",
+      "confidence_score": "79.6"
+    }
+  ]
+}

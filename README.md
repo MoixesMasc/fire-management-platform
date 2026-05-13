@@ -205,7 +205,20 @@ for table, key in [('fire_reports','report_id'), ('fire_validations','validation
 EOF
 ```
 
-### 5. Arrancar servicios
+### 5. Cargar datos ficticios
+
+```bash
+DYNAMODB_ENDPOINT_URL=http://localhost:4566 python scripts/seed_test_data.py
+```
+
+> Si usas DynamoDB Local en vez de LocalStack, ajusta `DYNAMODB_ENDPOINT_URL=http://localhost:8000`.
+
+Este script creará tablas si no existen y poblará:
+- `fire_users`
+- `fire_reports`
+- `fire_validations`
+
+### 6. Arrancar servicios
 
 ```bash
 # Users Service
